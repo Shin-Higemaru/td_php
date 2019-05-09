@@ -6,6 +6,7 @@ $users = findAllUsers();
 //die();
 require 'templates/header.php' ?>
 <body>
+<!--GIT c'est cool & the gang -->
 <!--  .container>.row>.col-12 + tabulation  -->
 <div class="container">
     <div class="row">
