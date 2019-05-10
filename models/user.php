@@ -36,10 +36,20 @@ function addUser(array $datas) {
 
 function findAllUsers() {
     global $db;
-    $sql = "SELECT * FROM users";
+    $sql = "SELECT * FROM users ORDER BY  created_at DESC";
     $stmt = $db->prepare($sql);
     $stmt->execute();
     $stmt->setFetchMode(PDO::FETCH_ASSOC);
     $resultat = $stmt->fetchAll();
     return $resultat;
+}
+
+function setAdmin($id,$is_admin = true) {
+    global $db;
+    $sql = "UPDATE users SET is_admin = :is_admin WHERE id= :id";
+    $stmt = $db->prepare($sql);
+    $stmt->bindParam(':is_admin',$is_admin,PDO::PARAM_BOOL);
+    $stmt->bindParam(':id',$id,PDO::PARAM_INT);
+    $stmt->execute();
+
 }

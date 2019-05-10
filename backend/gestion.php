@@ -1,4 +1,6 @@
 <?php
+require '../kernel/functions.php';
+require '../kernel/session_check.php';
 require '../kernel/db_connect.php';
 require '../models/user.php';
 $users = findAllUsers();
@@ -10,8 +12,14 @@ require 'templates/header.php' ?>
 <!--  .container>.row>.col-12 + tabulation  -->
 <div class="container">
     <div class="row">
+        <div class="col-12 text-right">
+            <span class="badge badge-primary">Bienvenue <?= $_SESSION['login'] ?></span>
+        </div>
+    </div>
+    <div class="row">
         <div class="col-12">
             <h1>Gestion des abonnés</h1>
+            <?= getFlash() ?>
 <!--            table>thead>tr>th*6 +tabulation -->
             <table class="table table-bordered table-striped table-hover">
                 <thead>
@@ -22,6 +30,7 @@ require 'templates/header.php' ?>
                     <th>Prénom</th>
                     <th>Admin ?</th>
                     <th>Date d'inscription</th>
+                    <th>Actions</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -43,12 +52,22 @@ require 'templates/header.php' ?>
                             <?= date_format($date_creation,'d/m/Y H:i') ?>
 <!--                           09/05/2019 11H30 -->
                         </td>
+                        <td>
+                            <?php if(!$user['is_admin']) : ?>
+                            <a class="btn btn-outline-dark" href="../controllers/toggleAdmin.php?id=<?= $user['id'] ?>&admin=1">Donner droit admin</a>
+                            <?php else: ?>
+                            <a class="btn btn-dark <?php if ($_SESSION['id_admin'] == $user['id']) :?> disabled <?php endif ?>" href="../controllers/toggleAdmin.php?id=<?= $user['id'] ?>">Annuler droit admin</a>
+                            <?php endif ?>
+                        </td>
                     </tr>
                 <?php endforeach ?>
                 </tbody>
             </table>
         </div>
     </div>
+</div>
+<div class="container text-center">
+    <a onclick="return confirm('Sûr de nous quitter !?')" href="../controllers/logout.php">Quitter</a>
 </div>
 <?php require 'templates/footer.php' ?>
 </body>
